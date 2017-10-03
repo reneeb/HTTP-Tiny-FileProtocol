@@ -14,13 +14,14 @@ our $VERSION = 0.01;
 
 no warnings 'redefine';
 
-my $orig = *HTTP::Tiny::get{CODE};
+my $orig        = *HTTP::Tiny::get{CODE};
+my $orig_mirror = *HTTP::Tiny::mirror{CODE};
 
 *HTTP::Tiny::get = sub {
     my ($self, $url, $args) = @_;
 
     @_ == 2 || (@_ == 3 && ref $args eq 'HASH')
-        or _croak(q/Usage: $http->get(URL, [HASHREF])/ . "\n");
+        or croak(q/Usage: $http->get(URL, [HASHREF])/ . "\n");
 
     if ( $url !~ m{\Afile://} ) {
         return $self->$orig( $url, $args || {});
@@ -71,7 +72,40 @@ my $orig = *HTTP::Tiny::get{CODE};
 
     return _build_response( $url, $success, $status, $reason, $content, $content_type );
 };
-    
+
+*HTTP::Tiny::mirror = sub {
+    my ($self, $url, $file, $args) = @_;
+
+    @_ == 3 || (@_ == 4 && ref $args eq 'HASH')
+        or croak(q/Usage: $http->mirror(URL, FILE, [HASHREF])/ . "\n");
+
+    if ( $url !~ m{\Afile://} ) {
+        return $self->$orig_mirror( $url, $file, $args || {});
+    }
+
+    my $tempfile = $file . int(rand(2**31));
+
+    require Fcntl;
+    sysopen my $fh, $tempfile, Fcntl::O_CREAT()|Fcntl::O_EXCL()|Fcntl::O_WRONLY()
+        or croak(qq/Error: Could not create temporary file $tempfile for downloading: $!\n/);
+    binmode $fh;
+
+    my $response = $self->get( $url, $args || {} );
+
+    if ( $response->{success} ) {
+        print {$fh} $response->{content};
+
+        rename $tempfile, $file
+            or croak(qq/Error replacing $file with $tempfile: $!\n/);
+    }
+
+    close $fh
+        or croak(qq/Error: Caught error closing temporary file $tempfile: $!\n/);
+
+    unlink $tempfile;
+    return $response;
+};
+
 sub _build_response {
     my ($url, $success, $status, $reason, $content, $content_type) = @_;
 
