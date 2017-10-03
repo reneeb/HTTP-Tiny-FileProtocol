@@ -10,7 +10,7 @@ use File::Basename;
 use LWP::MediaTypes;
 use Carp;
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 no warnings 'redefine';
 

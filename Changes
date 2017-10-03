@@ -1,6 +1,10 @@
 Change history for HTTP::Tiny::FileProtocol
 ===========================================
 
+0.02  2017-10-03T13:39:00
+
+      add 'mirror' for files
+
 0.01  2017-10-02T20:13:00
 
       initial release
