@@ -10,7 +10,7 @@ use File::Basename;
 use LWP::MediaTypes;
 use Carp;
 
-our $VERSION = 0.02;
+our $VERSION = 0.03;
 
 no warnings 'redefine';
 
@@ -139,7 +139,8 @@ sub _build_response {
   
     my $http = HTTP::Tiny->new;
   
-    my $response = $http->get( 'file:///tmp/data.txt' );
+    my $response        = $http->get( 'file:///tmp/data.txt' );
+    my $mirror_response = $http->get( 'file:///tmp/data.txt', 'data.txt' );
 
 will return
 
