@@ -10,8 +10,6 @@ use File::Basename;
 use LWP::MediaTypes;
 use Carp;
 
-our $VERSION = 0.04;
-
 no warnings 'redefine';
 
 my $orig        = *HTTP::Tiny::get{CODE};
