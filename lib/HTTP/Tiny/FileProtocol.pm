@@ -132,7 +132,6 @@ sub _build_response {
 
 =head1 SYNOPSIS
 
-    use HTTP::Tiny;
     use HTTP::Tiny::FileProtocol;
   
     my $http = HTTP::Tiny->new;
