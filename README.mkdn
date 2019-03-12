@@ -1,0 +1,90 @@
+[![Build Status](https://travis-ci.org/reneeb/HTTP-Tiny-FileProtocol.svg?branch=master)](https://travis-ci.org/reneeb/HTTP-Tiny-FileProtocol)
+[![Kwalitee status](http://cpants.cpanauthors.org/dist/HTTP-Tiny-FileProtocol.png)](http://cpants.charsbar.org/dist/overview/HTTP-Tiny-FileProtocol)
+[![GitHub issues](https://img.shields.io/github/issues/reneeb/HTTP-Tiny-FileProtocol.svg)](https://github.com/reneeb/HTTP-Tiny-FileProtocol/issues)
+
+# NAME
+
+HTTP::Tiny::FileProtocol - Add support for file:// protocol to HTTP::Tiny
+
+# VERSION
+
+version 0.06
+
+# SYNOPSIS
+
+      use HTTP::Tiny::FileProtocol;
+    
+      my $http = HTTP::Tiny->new;
+    
+      my $response        = $http->get( 'file:///tmp/data.txt' );
+      my $mirror_response = $http->get( 'file:///tmp/data.txt', 'data.txt' );
+
+will return
+
+    {
+        success => 1,
+        status  => 200,
+        content => $content_of_file
+        headers => {
+            content_type   => 'text/plain',
+            content_length => $length_of_content,
+        },
+    }
+
+
+
+# Development
+
+The distribution is contained in a Git repository, so simply clone the
+repository
+
+```
+$ git clone http://github.com/reneeb/HTTP-Tiny-FileProtocol.git
+```
+
+and change into the newly-created directory.
+
+```
+$ cd HTTP-Tiny-FileProtocol
+```
+
+The project uses [`Dist::Zilla`](https://metacpan.org/pod/Dist::Zilla) to
+build the distribution, hence this will need to be installed before
+continuing:
+
+```
+$ cpanm Dist::Zilla
+```
+
+To install the required prequisite packages, run the following set of
+commands:
+
+```
+$ dzil authordeps --missing | cpanm
+$ dzil listdeps --author --missing | cpanm
+```
+
+The distribution can be tested like so:
+
+```
+$ dzil test
+```
+
+To run the full set of tests (including author and release-process tests),
+add the `--author` and `--release` options:
+
+```
+$ dzil test --author --release
+```
+
+# AUTHOR
+
+Renee Baecker <reneeb@cpan.org>
+
+# COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2017 by Renee Baecker.
+
+This is free software, licensed under:
+
+    The Artistic License 2.0 (GPL Compatible)
