@@ -122,14 +122,14 @@ sub _build_response {
     my $http = HTTP::Tiny->new;
   
     my $response        = $http->get( 'file:///tmp/data.txt' );
-    my $mirror_response = $http->get( 'file:///tmp/data.txt', 'data.txt' );
+    my $mirror_response = $http->mirror( 'file:///tmp/data.txt', 'data.txt' );
 
 will return
 
     {
         success => 1,
         status  => 200,
-        content => $content_of_file
+        content => $content_of_file,
         headers => {
             content_type   => 'text/plain',
             content_length => $length_of_content,
